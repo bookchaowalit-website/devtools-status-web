@@ -1,16 +1,11 @@
 "use client";
 
 import { useState } from "react";
-
-const SERVICES = [
-  { name: "Website", status: "operational", uptime: "99.9%", note: "responding" },
-  { name: "API", status: "operational", uptime: "99.8%", note: "responding" },
-  { name: "Job queue", status: "monitoring", uptime: "99.7%", note: "sample advisory" },
-];
+import { SERVICES, WINDOWS, summarize, type StatusWindow } from "@/lib/status";
 
 export default function Home() {
-  const [range, setRange] = useState("7d");
-  const operational = SERVICES.filter((service) => service.status === "operational").length;
+  const [range, setRange] = useState<StatusWindow>("7d");
+  const { operational, total } = summarize(SERVICES);
 
   return (
     <main className="control-shell">
@@ -26,9 +21,9 @@ export default function Home() {
 
       <section className="control-signal" aria-label="Overall status">
         <div><span>OVERALL</span><strong>Operational</strong></div>
-        <div><span>SERVICES</span><strong>{operational} / {SERVICES.length}</strong></div>
+        <div><span>SERVICES</span><strong>{operational} / {total}</strong></div>
         <div><span>INCIDENTS</span><strong>00</strong></div>
-        <div className="control-range"><span>WINDOW</span><div>{["24h", "7d", "30d"].map((item) => <button key={item} type="button" aria-pressed={range === item} onClick={() => setRange(item)}>{item}</button>)}</div></div>
+        <div className="control-range"><span>WINDOW</span><div>{WINDOWS.map((item) => <button key={item} type="button" aria-pressed={range === item} onClick={() => setRange(item)}>{item}</button>)}</div></div>
       </section>
 
       <section className="control-grid">
@@ -36,8 +31,8 @@ export default function Home() {
           <div className="control-panel-head"><span>A / SERVICE MATRIX</span><span>{range} view</span></div>
           <h2>Systems in view.</h2>
           <div className="control-table" role="table" aria-label="Service status">
-            <div className="control-table-row control-table-labels" role="row"><span>NAME</span><span>UPTIME</span><span>STATE</span></div>
-            {SERVICES.map((service) => <div className="control-table-row" role="row" key={service.name}><strong>{service.name}</strong><span>{service.uptime}</span><span className={`control-state control-state-${service.status}`}><i />{service.status}</span></div>)}
+            <div className="control-table-row control-table-labels" role="row"><span role="columnheader">NAME</span><span role="columnheader">UPTIME</span><span role="columnheader">STATE</span></div>
+            {SERVICES.map((service) => <div className="control-table-row" role="row" key={service.id}><strong role="rowheader">{service.name}</strong><span role="cell">{service.uptime}</span><span role="cell" className={`control-state control-state-${service.status}`}><i aria-hidden="true" />{service.status}</span></div>)}
           </div>
           <p className="control-footnote">Numbers are authored sample values, not a live probe.</p>
         </div>
