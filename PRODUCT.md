@@ -18,7 +18,8 @@ A portfolio visitor who wants to see how a calm, readable status surface could l
    monitoring) as an accessible table (column headers, row headers, cells).
 2. The summary counts operational services; the incident log shows the empty state; one sample advisory explains
    the monitoring state.
-3. The 24h / 7d / 30d window buttons change the label only.
+3. There is no period switch: the sample has one uptime figure per service (the old 24h / 7d / 30d buttons changed
+   no number and were removed on 2026-11-16).
 4. `/api/mcp` answers JSON-RPC with `get_all`, `get_by_id` and `search` over the same sample list.
 5. Front-end and server errors go to Sentry (errors only, personal data stripped) when `NEXT_PUBLIC_SENTRY_DSN` is set.
 
