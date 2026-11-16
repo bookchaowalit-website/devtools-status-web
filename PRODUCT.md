@@ -31,13 +31,9 @@ A portfolio visitor who wants to see how a calm, readable status surface could l
 
 ## Live URL and deploy state
 
-- Live: https://status.bookchaowalit.com (HTTP 200 on 2026-10-23).
-- The Vercel project `bookchaowalit-status-frontend` is deployed only by CLI. Last production deploy: 2026-10-23
-  12:24, CLI, commit e7527fa (the CVE patch). Its Git link names the old repository
-  `bookchaowalit/bookchaowalit-status-frontend`, so a push to `main` does not deploy: the L2 commits (table
-  accessibility fix, truthful MCP route, tests, Sentry) stay undeployed until the owner reconnects Vercel Git to
-  `bookchaowalit-website/devtools-status-web` (owner action D9). The live site still has the
-  aria-required-children error until then.
+- Live: https://status.bookchaowalit.com (HTTP 200 on 2026-11-16, Dashboard shell).
+- Vercel Git deploy is connected to `bookchaowalit-website/devtools-status-web` (owner action D9 is done): a push to `main`
+  deploys. Last production deploy: 2026-11-16, Git, commit d5d8e73 (Dashboard shell move), Vercel status success.
 - `NEXT_PUBLIC_SENTRY_DSN` is set on the Vercel project (Sentry project `devtools-status-web`, org `personal-yu0`).
 
 ## Boundaries
