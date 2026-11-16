@@ -1,54 +1,78 @@
-"use client";
+import { DashFoot, DashTop, Pill, Stat, type Tone } from "@/components/dashboard-shell";
+import { SERVICES, summarize, type ServiceState } from "@/lib/status";
 
-import { useState } from "react";
-import { SERVICES, WINDOWS, summarize, type StatusWindow } from "@/lib/status";
+const STATE: Record<ServiceState, { label: string; tone: Tone; dot: string }> = {
+  operational: { label: "Operational", tone: "green", dot: "green" },
+  monitoring: { label: "Monitoring", tone: "amber", dot: "amber" },
+};
 
 export default function Home() {
-  const [range, setRange] = useState<StatusWindow>("7d");
-  const { operational, total } = summarize(SERVICES);
+  const { operational, total, monitoring } = summarize(SERVICES);
+  const watched = SERVICES.filter((service) => service.status === "monitoring");
+  const overall = monitoring ? "Monitoring" : "Operational";
 
   return (
-    <main className="control-shell">
-      <nav className="control-nav" aria-label="Control Room">
-        <span className="control-mark">CONTROL / ROOM</span>
-        <span>PUBLIC SNAPSHOT · SAMPLE DATA</span>
-      </nav>
+    <div className="ds">
+      <a className="ds-skip" href="#main">Skip to content</a>
+      <DashTop name="Status" tagline="Three sample services" />
 
-      <header className="control-hero">
-        <div><h1>Know what is holding.</h1><p>A clear service status surface for the moments when a useful answer matters more than a decorative dashboard.</p></div>
-        <div className="control-now"><span>NOW</span><strong>OK</strong><small>sample snapshot</small></div>
-      </header>
-
-      <section className="control-signal" aria-label="Overall status">
-        <div><span>OVERALL</span><strong>Operational</strong></div>
-        <div><span>SERVICES</span><strong>{operational} / {total}</strong></div>
-        <div><span>INCIDENTS</span><strong>00</strong></div>
-        <div className="control-range"><span>WINDOW</span><div>{WINDOWS.map((item) => <button key={item} type="button" aria-pressed={range === item} onClick={() => setRange(item)}>{item}</button>)}</div></div>
-      </section>
-
-      <section className="control-grid">
-        <div className="control-panel control-services">
-          <div className="control-panel-head"><span>A / SERVICE MATRIX</span><span>{range} view</span></div>
-          <h2>Systems in view.</h2>
-          <div className="control-table" role="table" aria-label="Service status">
-            <div className="control-table-row control-table-labels" role="row"><span role="columnheader">NAME</span><span role="columnheader">UPTIME</span><span role="columnheader">STATE</span></div>
-            {SERVICES.map((service) => <div className="control-table-row" role="row" key={service.id}><strong role="rowheader">{service.name}</strong><span role="cell">{service.uptime}</span><span role="cell" className={`control-state control-state-${service.status}`}><i aria-hidden="true" />{service.status}</span></div>)}
+      <main id="main" tabIndex={-1} className="ds-main">
+        <div className="ds-head">
+          <div>
+            <h1>Service status</h1>
+            <p>Uptime per service, authored values <Pill tone="grey">Sample data</Pill></p>
           </div>
-          <p className="control-footnote">Numbers are authored sample values, not a live probe.</p>
         </div>
 
-        <div className="control-panel control-incidents">
-          <div className="control-panel-head"><span>B / INCIDENT LOG</span><span>00 open</span></div>
-          <h2>Nothing active.</h2>
-          <div className="control-clear-state"><span className="control-clear-code">OK</span><div><strong>All clear</strong><p>No active incidents in this sample window.</p></div></div>
-          <div className="control-log-line"><span>LAST CHECK</span><strong>just now</strong></div>
-          <div className="control-log-line"><span>DATA SOURCE</span><strong>local fixture</strong></div>
+        <ul className="ds-stats" aria-label="Status at a glance">
+          <Stat label="Overall" value={overall} note={monitoring ? `${monitoring} service under watch` : "every service responding"} />
+          <Stat label="Operational" value={`${operational} / ${total}`} note="services" />
+          <Stat label="Open incidents" value={0} note="in this sample" />
+        </ul>
+
+        <div className="ds-grid">
+          <section className="ds-panel" aria-labelledby="services-heading">
+            <div className="ds-panel-head">
+              <div>
+                <h2 id="services-heading">Services</h2>
+                <p>Name, state and uptime</p>
+              </div>
+            </div>
+            <ul className="ds-rows">
+              {SERVICES.map((service) => (
+                <li key={service.id} className="ds-row">
+                  <span className="ds-row-name"><span className="ds-dot" data-tone={STATE[service.status].dot} aria-hidden="true" />{service.name}</span>
+                  <span className="ds-row-detail">{service.uptime} uptime · {service.note}</span>
+                  <span className="ds-row-value"><Pill tone={STATE[service.status].tone}>{STATE[service.status].label}</Pill></span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="ds-panel" aria-labelledby="incidents-heading">
+            <div className="ds-panel-head">
+              <div>
+                <h2 id="incidents-heading">Incidents</h2>
+                <p>Open now</p>
+              </div>
+            </div>
+            <div className="ds-callout">
+              <strong>No open incidents</strong>
+              <span>Nothing is down in this sample.</span>
+            </div>
+            {watched.map((service) => (
+              <div className="ds-callout" key={service.id}>
+                <strong>{service.name}: monitoring</strong>
+                <span>Shown as a sample advisory, so the page can show a state that is not green without inventing an incident.</span>
+              </div>
+            ))}
+          </section>
         </div>
-      </section>
 
-      <section className="control-advisory"><span className="control-advisory-label">ADVISORY / 01</span><p>The job queue carries a sample monitoring state so the interface can show a non-green status without inventing an active incident.</p><span className="control-advisory-state">MONITORING</span></section>
+        <p className="ds-note">Numbers are authored sample values, not a live probe. No monitoring runs behind this page and no notification channel is connected.</p>
+      </main>
 
-      <footer className="control-footer"><span>STATUS PAGE / HONEST DEMO</span><span>NO LIVE MONITORING · NO NOTIFICATION CHANNEL</span></footer>
-    </main>
+      <DashFoot source="https://github.com/bookchaowalit-website/devtools-status-web" />
+    </div>
   );
 }

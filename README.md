@@ -1,10 +1,10 @@
-# Status Page (Control / Room)
+# Status (dashboard)
 
 A one-page service status demo: three authored sample services (Website, API, Job queue) with uptime figures and a
-state, an overall summary, an empty incident log and one sample advisory. The 24h / 7d / 30d buttons only relabel the
-view; the numbers do not change. Nothing is probed.
+state, an overall summary, an empty incident log and one sample advisory. Nothing is probed. Built on the Dashboard shell
+(see `DASHBOARD.md`); the old 24h / 7d / 30d buttons were dropped because they changed no number.
 
-Live: https://status.bookchaowalit.com (deployed by Vercel CLI; it can lag `main`, see `PRODUCT.md`).
+Live: https://status.bookchaowalit.com (Vercel Git deploy: a push to `main` deploys).
 
 ## What it does not do
 
@@ -21,7 +21,7 @@ npm run dev
 ## Checks
 
 ```bash
-npm test           # Vitest: status logic, MCP route, home page render (incl. table roles), Sentry scrubbing
+npm test           # Vitest: status logic, MCP route, home page render, the Dashboard shell, Sentry scrubbing
 npm run lint
 npm run typecheck
 npm run build
@@ -38,4 +38,5 @@ build) and the shared security scan on every push and PR to `main`.
   unknown tools and methods return JSON-RPC errors.
 - `lib/sentry.ts` + `instrumentation*.ts`: error reporting to Sentry, errors only, personal data stripped; off when
   `NEXT_PUBLIC_SENTRY_DSN` is unset.
+- `app/dashboard-shell.css` + `components/dashboard-shell.tsx`: the copied-in Dashboard shell (`DASHBOARD.md`).
 - `app/more-projects/page.tsx`: shared portfolio link page (copied per repository, not a package).
