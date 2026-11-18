@@ -22,6 +22,8 @@ describe("status page", () => {
 
   it("lists every service with its state in words, not only colour", () => {
     const page = html();
+    // Keeps its list role in Safari/VoiceOver even though the rows drop the bullets.
+    expect(page).toContain('<ul class="ds-rows" role="list">');
     for (const name of ["Website", "API", "Job queue"]) expect(page).toContain(`aria-hidden="true"></span>${name}</span>`);
     expect(page.match(/data-tone="green">Operational</g)).toHaveLength(2);
     expect(page.match(/data-tone="amber">Monitoring</g)).toHaveLength(1);

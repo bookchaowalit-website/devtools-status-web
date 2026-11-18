@@ -38,7 +38,8 @@ export default function Home() {
                 <p>Name, state and uptime</p>
               </div>
             </div>
-            <ul className="ds-rows">
+            {/* role="list": Safari drops the list role from a list-style: none list, so VoiceOver would not say how many services. */}
+            <ul className="ds-rows" role="list">
               {SERVICES.map((service) => (
                 <li key={service.id} className="ds-row">
                   <span className="ds-row-name"><span className="ds-dot" data-tone={STATE[service.status].dot} aria-hidden="true" />{service.name}</span>
