@@ -45,16 +45,21 @@ describe("status page", () => {
     expect(stats[1].hasAttribute("data-tone")).toBe(false);
   });
 
-  it("lists every service with its state in words and the uptime window", () => {
-    const list = host.querySelector(".ds-rows");
-    // Keeps its list role in Safari/VoiceOver even though the rows drop the bullets.
-    expect(list?.getAttribute("role")).toBe("list");
-    expect(list?.classList.contains("status-rows")).toBe(true);
-    const rows = [...host.querySelectorAll(".ds-row")];
-    expect(rows.map((r) => text(r.querySelector(".ds-row-name")))).toEqual(["Website", "API", "Job queue"]);
-    expect(rows.map((r) => text(r.querySelector(".ds-row-value")))).toEqual(["Operational", "Operational", "Monitoring"]);
-    expect(text(rows[2].querySelector(".ds-row-detail"))).toBe("99.7% uptime (30d) · sample advisory");
+  it("lists every service in a real table, so screen readers can move by column", () => {
+    const table = host.querySelector("table.status-table");
+    expect(table).not.toBeNull();
+    const region = table?.closest(".status-table-wrap");
+    expect([region?.getAttribute("role"), region?.getAttribute("aria-labelledby"), region?.getAttribute("tabindex")]).toEqual(["region", "services-heading", "0"]);
+    // Column headers name each column; every row is led by its service name as a row header.
+    const cols = [...host.querySelectorAll("thead th")];
+    expect(cols.map((th) => [text(th), th.getAttribute("scope")])).toEqual([["Service", "col"], ["State", "col"], ["Uptime (30d)", "col"]]);
+    const rows = [...host.querySelectorAll("tbody tr")];
+    expect(rows.map((r) => [r.querySelector("th")?.getAttribute("scope"), text(r.querySelector(".status-name"))])).toEqual([["row", "Website"], ["row", "API"], ["row", "Job queue"]]);
+    expect(rows.map((r) => [...r.querySelectorAll("td")].map(text))).toEqual([["Operational", "99.9%"], ["Operational", "99.8%"], ["Monitoring", "99.7%"]]);
+    expect(text(rows[2].querySelector(".status-note"))).toBe("sample advisory");
     expect(rows[2].querySelector(".ds-pill")?.getAttribute("data-tone")).toBe("amber");
+    expect(rows[2].querySelector(".ds-dot")?.getAttribute("data-tone")).toBe("amber");
+    expect(host.querySelector(".ds-rows")).toBeNull();
   });
 
   it("puts the advisory first and styles it apart from the all-clear", () => {

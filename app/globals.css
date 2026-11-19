@@ -3,10 +3,17 @@
 
 html, body { margin: 0; background: var(--ds-bg); }
 
-/* Service rows: the state pill sits beside the name and drops under it when the name would get narrower than
-   ~6 characters (large text on a phone), instead of squeezing the name to one letter a line. The detail line
-   always takes its own row. App-side override of the shared .ds-row grid. */
-.status-rows .ds-row { display: flex; flex-wrap: wrap; align-items: center; column-gap: 12px; }
-.status-rows .ds-row-name { order: 1; flex: 1 1 6em; }
-.status-rows .ds-row-value { order: 2; margin-left: auto; }
-.status-rows .ds-row-detail { order: 3; flex: 1 1 100%; }
+/* Services table: the shell's .ds-table in its own scroll region (no height cap: three rows), so with large text on a
+   phone the table scrolls inside the panel instead of pushing the page sideways. */
+.status-table-wrap { overflow-x: auto; border: 1px solid var(--ds-line); border-radius: 12px; }
+.status-table th[scope="row"] { font-weight: 600; }
+.status-table td { white-space: nowrap; }
+.status-name { display: flex; align-items: center; }
+.status-note { display: block; margin-top: 2px; color: var(--ds-muted); font-size: 13px; font-weight: 400; }
+/* Phones: tighter cells, so the three columns fit a 320px screen at normal text size (larger text scrolls in the region). */
+@media (max-width: 560px) {
+  .status-table th, .status-table td { padding: 10px 6px; }
+  .status-table th:first-child, .status-table td:first-child { padding-left: 8px; }
+  .status-table th:last-child, .status-table td:last-child { padding-right: 8px; }
+  .status-table .ds-pill { padding: 0 7px; font-size: 12px; }
+}

@@ -46,16 +46,31 @@ export default function Home() {
                 <p>Name, state and {UPTIME_WINDOW} uptime</p>
               </div>
             </div>
-            {/* role="list": Safari drops the list role from a list-style: none list, so VoiceOver would not say how many services. */}
-            <ul className="ds-rows status-rows" role="list">
-              {SERVICES.map((service) => (
-                <li key={service.id} className="ds-row">
-                  <span className="ds-row-name"><span className="ds-dot" data-tone={STATE[service.status].tone} aria-hidden="true" />{service.name}</span>
-                  <span className="ds-row-detail">{service.uptime} uptime ({UPTIME_WINDOW}) · {service.note}</span>
-                  <span className="ds-row-value"><Pill tone={STATE[service.status].tone}>{STATE[service.status].label}</Pill></span>
-                </li>
-              ))}
-            </ul>
+            {/* A real table (row headers, column headers, cells), so screen reader table commands can compare state and
+                uptime across services; the scroll wrapper keeps large text from pushing the page sideways. */}
+            <div className="status-table-wrap" role="region" aria-labelledby="services-heading" tabIndex={0}>
+              <table className="ds-table status-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Service</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Uptime ({UPTIME_WINDOW})</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {SERVICES.map((service) => (
+                    <tr key={service.id}>
+                      <th scope="row">
+                        <span className="status-name"><span className="ds-dot" data-tone={STATE[service.status].tone} aria-hidden="true" />{service.name}</span>
+                        <span className="status-note">{service.note}</span>
+                      </th>
+                      <td><Pill tone={STATE[service.status].tone}>{STATE[service.status].label}</Pill></td>
+                      <td>{service.uptime}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <section className="ds-panel" aria-labelledby="incidents-heading">
