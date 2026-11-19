@@ -5,10 +5,10 @@ import { SAMPLE, SERVICES, UPTIME_WINDOW, WINDOWS, WINDOW_LABEL, formatUpdated, 
 describe("sample edit time", () => {
   it("comes with the data and changes whenever the services change", () => {
     expect(SERVICES).toBe(SAMPLE.services);
-    expect(new Date(SAMPLE.updatedAt).toISOString()).toBe("2026-10-23T05:30:59.000Z");
+    expect(new Date(SAMPLE.updatedAt).toISOString()).toBe("2026-08-24T12:03:53.000Z");
     // If this fails you edited the sample services: set SAMPLE.updatedAt to the time of that edit, then update the fingerprint.
     const fingerprint = createHash("sha256").update(JSON.stringify(SAMPLE.services)).digest("hex").slice(0, 16);
-    expect({ fingerprint, updatedAt: SAMPLE.updatedAt }).toEqual({ fingerprint: "5e7a63f395204cf4", updatedAt: "2026-10-23T05:30:59Z" });
+    expect({ fingerprint, updatedAt: SAMPLE.updatedAt }).toEqual({ fingerprint: "5e7a63f395204cf4", updatedAt: "2026-08-24T12:03:53Z" });
   });
 });
 

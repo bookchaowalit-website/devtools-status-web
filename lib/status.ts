@@ -6,10 +6,10 @@ export type Service = { id: string; name: string; status: ServiceState; uptime: 
 /**
  * The sample and the time its values were last edited (UTC), kept together: the page's "Updated" label reads `updatedAt`
  * from here. Whoever edits `services` sets `updatedAt` to that moment; tests/status.test.ts pins a fingerprint of the
- * services so an edit without a new time fails. (Values last changed in d55b88c, 2026-10-23 12:30:59 +07:00.)
+ * services so an edit without a new time fails. (Visible values last changed in aa46486, 2026-08-24 19:03:53 +07:00; d55b88c only moved the data and added ids.)
  */
 export const SAMPLE: { readonly updatedAt: string; readonly services: readonly Service[] } = {
-  updatedAt: "2026-10-23T05:30:59Z",
+  updatedAt: "2026-08-24T12:03:53Z",
   services: [
     { id: "website", name: "Website", status: "operational", uptime: "99.9%", note: "responding" },
     { id: "api", name: "API", status: "operational", uptime: "99.8%", note: "responding" },

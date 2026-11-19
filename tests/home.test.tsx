@@ -29,9 +29,9 @@ describe("status page", () => {
     const head = text(host.querySelector(".ds-head p"));
     expect(head).toContain("Uptime over the last 30 days");
     // The label reads the sample's own edit time, not a hard-coded string.
-    expect(head).toContain("Updated 23 Oct 2026, 05:30 UTC");
+    expect(head).toContain("Updated 24 Aug 2026, 12:03 UTC");
     expect(head).toContain("Sample data");
-    expect(host.querySelector(".ds-head time")?.getAttribute("datetime")).toBe("2026-10-23T05:30:59Z");
+    expect(host.querySelector(".ds-head time")?.getAttribute("datetime")).toBe("2026-08-24T12:03:53Z");
     const note = text(host.querySelector(".ds-note"));
     expect(note).toContain("not a live probe");
     expect(note).toContain("no notification channel is connected");
