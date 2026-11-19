@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { SERVICES, UPTIME_WINDOW, WINDOWS, WINDOW_LABEL, formatUpdated, searchServices, summarize, type Service } from "@/lib/status";
+import { createHash } from "node:crypto";
+import { SAMPLE, SERVICES, UPTIME_WINDOW, WINDOWS, WINDOW_LABEL, formatUpdated, searchServices, summarize, type Service } from "@/lib/status";
+
+describe("sample edit time", () => {
+  it("comes with the data and changes whenever the services change", () => {
+    expect(SERVICES).toBe(SAMPLE.services);
+    expect(new Date(SAMPLE.updatedAt).toISOString()).toBe("2026-10-23T05:30:59.000Z");
+    // If this fails you edited the sample services: set SAMPLE.updatedAt to the time of that edit, then update the fingerprint.
+    const fingerprint = createHash("sha256").update(JSON.stringify(SAMPLE.services)).digest("hex").slice(0, 16);
+    expect({ fingerprint, updatedAt: SAMPLE.updatedAt }).toEqual({ fingerprint: "5e7a63f395204cf4", updatedAt: "2026-10-23T05:30:59Z" });
+  });
+});
 
 describe("status logic", () => {
   it("counts operational and monitoring services", () => {

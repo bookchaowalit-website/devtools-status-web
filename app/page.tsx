@@ -1,5 +1,5 @@
 import { DashFoot, DashTop, Pill, Stat, type Tone } from "@/components/dashboard-shell";
-import { SAMPLE_UPDATED_AT, SERVICES, UPTIME_WINDOW, WINDOW_LABEL, formatUpdated, summarize, type ServiceState } from "@/lib/status";
+import { SAMPLE, SERVICES, UPTIME_WINDOW, WINDOW_LABEL, formatUpdated, summarize, type ServiceState } from "@/lib/status";
 
 const STATE: Record<ServiceState, { label: string; tone: Tone }> = {
   operational: { label: "Operational", tone: "green" },
@@ -22,7 +22,7 @@ export default function Home() {
             <h1>Service status</h1>
             <p>
               Uptime over the {WINDOW_LABEL[UPTIME_WINDOW]}, authored values · Updated{" "}
-              <time dateTime={SAMPLE_UPDATED_AT}>{formatUpdated(SAMPLE_UPDATED_AT)}</time> <Pill tone="grey">Sample data</Pill>
+              <time dateTime={SAMPLE.updatedAt}>{formatUpdated(SAMPLE.updatedAt)}</time> <Pill tone="grey">Sample data</Pill>
             </p>
           </div>
         </div>
