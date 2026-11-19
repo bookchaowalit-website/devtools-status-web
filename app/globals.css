@@ -2,3 +2,11 @@
 @import "./dashboard-shell.css";
 
 html, body { margin: 0; background: var(--ds-bg); }
+
+/* Service rows: the state pill sits beside the name and drops under it when the name would get narrower than
+   ~6 characters (large text on a phone), instead of squeezing the name to one letter a line. The detail line
+   always takes its own row. App-side override of the shared .ds-row grid. */
+.status-rows .ds-row { display: flex; flex-wrap: wrap; align-items: center; column-gap: 12px; }
+.status-rows .ds-row-name { order: 1; flex: 1 1 6em; }
+.status-rows .ds-row-value { order: 2; margin-left: auto; }
+.status-rows .ds-row-detail { order: 3; flex: 1 1 100%; }

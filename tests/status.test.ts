@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SERVICES, WINDOWS, searchServices, summarize, type Service } from "@/lib/status";
+import { SERVICES, UPTIME_WINDOW, WINDOWS, WINDOW_LABEL, formatUpdated, searchServices, summarize, type Service } from "@/lib/status";
 
 describe("status logic", () => {
   it("counts operational and monitoring services", () => {
@@ -20,7 +20,14 @@ describe("status logic", () => {
     expect(searchServices([] as Service[], "x")).toEqual([]);
   });
 
-  it("offers the three time windows the page toggles", () => {
+  it("knows the three uptime windows", () => {
     expect(WINDOWS).toEqual(["24h", "7d", "30d"]);
+  });
+
+  it("names the uptime window and prints the update time in UTC", () => {
+    expect(UPTIME_WINDOW).toBe("30d");
+    expect(WINDOW_LABEL[UPTIME_WINDOW]).toBe("last 30 days");
+    expect(formatUpdated("2026-11-19T09:00:00Z")).toBe("19 Nov 2026, 09:00 UTC");
+    expect(formatUpdated("2027-01-05T23:07:00Z")).toBe("5 Jan 2027, 23:07 UTC");
   });
 });

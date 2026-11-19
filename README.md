@@ -39,4 +39,4 @@ build) and the shared security scan on every push and PR to `main`.
 - `lib/sentry.ts` + `instrumentation*.ts`: error reporting to Sentry, errors only, personal data stripped; off when
   `NEXT_PUBLIC_SENTRY_DSN` is unset.
 - `app/dashboard-shell.css` + `components/dashboard-shell.tsx`: the copied-in Dashboard shell (`DASHBOARD.md`).
-- `app/more-projects/page.tsx`: shared portfolio link page (copied per repository, not a package).
+- `next.config.ts`: `/more-projects` redirects (308) to the portfolio hub at https://bookchaowalit.com/.
